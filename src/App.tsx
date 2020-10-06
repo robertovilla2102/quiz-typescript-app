@@ -9,10 +9,13 @@ import QuestionCard from "./components/QuestionCard";
 //* types
 import { Difficulty, QuestionState } from "./API";
 
-type AnswerObject = {
+//* styles
+import { GlobalStyle } from "./App.styles";
+
+export type AnswerObject = {
   question: string;
   answer: string;
-  correct: string;
+  correct: boolean;
   correctAnswer: string;
 };
 
@@ -48,43 +51,72 @@ const App: VFC = () => {
   const checkAnswer = (e: MouseEvent<HTMLButtonElement>) => {
     if (!gameOver) {
       // Users answer
+      const answer = e.currentTarget.value;
+
+      // check anser against correct answer
+      const correct = questions[number].correct_answer === answer;
+
+      // add score if answer is correct
+      if (correct) setScore((prev) => prev + 1);
+
+      //save answer in the array for user answers
+      const answerObject = {
+        question: questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer,
+      };
+
+      setUserAnswers((prev) => [...prev, answerObject]);
     }
   };
 
-  const nextQuestion = () => {};
+  const nextQuestion = () => {
+    // move on the next question if not the last question
+    const nextQuestion = number + 1;
+
+    if (nextQuestion === TOTAL_QUESTIONS) {
+      setGameOver(true);
+    } else {
+      setNmumber(nextQuestion);
+    }
+  };
 
   return (
-    <div className="app">
-      <h1>React QUIZ</h1>
+    <>
+      <GlobalStyle />
+      <div className="app">
+        <h1>React QUIZ</h1>
 
-      {(gameOver || userAnswers.length === TOTAL_QUESTIONS) && (
-        <button className="start" onClick={startTtrivia}>
-          Start
-        </button>
-      )}
-
-      {!gameOver && <p className="score"> Score:</p>}
-
-      {loading && <p>Loading Questions ...</p>}
-
-      {!loading && !gameOver && (
-        <QuestionCard
-          totalQuerstions={TOTAL_QUESTIONS}
-          questionNr={number + 1}
-          question={questions[number].question}
-          answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
-          callback={checkAnswer}
-        />
-      )}
-
-      {!gameOver &&
-        !loading &&
-        userAnswers.length === number + 1 &&
-        number !== TOTAL_QUESTIONS - 1 && (
-          <button onClick={nextQuestion}>Next Question</button>
+        {(gameOver || userAnswers.length === TOTAL_QUESTIONS) && (
+          <button className="start" onClick={startTtrivia}>
+            Start
+          </button>
         )}
-    </div>
+
+        {!gameOver && <p className="score"> Score: {score}</p>}
+
+        {loading && <p>Loading Questions ...</p>}
+
+        {!loading && !gameOver && (
+          <QuestionCard
+            totalQuerstions={TOTAL_QUESTIONS}
+            questionNr={number + 1}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnswer}
+          />
+        )}
+
+        {!gameOver &&
+          !loading &&
+          userAnswers.length === number + 1 &&
+          number !== TOTAL_QUESTIONS - 1 && (
+            <button onClick={nextQuestion}>Next Question</button>
+          )}
+      </div>
+    </>
   );
 };
 

@@ -16,6 +16,7 @@ export type Question = {
   question: string;
   type: string;
 };
+
 export type QuestionState = Question & { answers: string[] };
 
 //* functions
