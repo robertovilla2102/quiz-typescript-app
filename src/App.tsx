@@ -10,7 +10,7 @@ import QuestionCard from "./components/QuestionCard";
 import { Difficulty, QuestionState } from "./API";
 
 //* styles
-import { GlobalStyle } from "./App.styles";
+import { GlobalStyle, Wrapper } from "./App.styles";
 
 export type AnswerObject = {
   question: string;
@@ -28,8 +28,6 @@ const App: VFC = () => {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-
-  console.log(questions);
 
   const startTtrivia = async () => {
     setLoading(true);
@@ -85,8 +83,8 @@ const App: VFC = () => {
   return (
     <>
       <GlobalStyle />
-      <div className="app">
-        <h1>React QUIZ</h1>
+      <Wrapper>
+        <h1>React Quiz</h1>
 
         {(gameOver || userAnswers.length === TOTAL_QUESTIONS) && (
           <button className="start" onClick={startTtrivia}>
@@ -115,7 +113,7 @@ const App: VFC = () => {
           number !== TOTAL_QUESTIONS - 1 && (
             <button onClick={nextQuestion}>Next Question</button>
           )}
-      </div>
+      </Wrapper>
     </>
   );
 };

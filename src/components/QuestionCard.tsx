@@ -1,4 +1,5 @@
 import React, { FC, MouseEvent } from "react";
+import styled from "styled-components";
 
 //* types
 import { AnswerObject } from "../App";
@@ -13,10 +14,10 @@ type Props = {
 };
 
 const QuestionCard: FC<Props> = ({
+  callback,
   question,
   answers,
   userAnswer,
-  callback,
   questionNr,
   totalQuerstions,
 }) => {
@@ -27,17 +28,31 @@ const QuestionCard: FC<Props> = ({
       </p>
 
       <p dangerouslySetInnerHTML={{ __html: question }} />
-      <div>
+      <QuestionContainer>
         {answers.map((answer) => (
           <div key={answer}>
-            <button disabled={!!userAnswer} value={answer} onClick={callback}>
+            <Question disabled={!!userAnswer} value={answer} onClick={callback}>
               <span dangerouslySetInnerHTML={{ __html: answer }} />
-            </button>
+            </Question>
           </div>
         ))}
-      </div>
+      </QuestionContainer>
     </>
   );
 };
 
 export default QuestionCard;
+
+export const QuestionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 24px;
+`;
+
+export const Question = styled.button`
+  margin: 0 12px;
+  padding: 12px;
+  width: 250px;
+  height: 65px;
+`;

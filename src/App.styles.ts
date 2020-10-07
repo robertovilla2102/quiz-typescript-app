@@ -16,8 +16,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
-    font-family: 'Catama', sans-serif;
+    font-family: "Catamaran", sans-serif;
+    margin: 0;
   }
 `;
 
